@@ -8,4 +8,12 @@ router.get("/produtos", produtoController.listarProdutos);
 //Post /produtos ->cria um nov produto
 router.post("/produtos", produtoController.criarProduto);
 
-module.exports = { produtosRoutes: router }; 
+//PUT /produtos/idProduto ->Atualizar um produto
+router.put("/produtos/:idProduto", produtoController.atualizarProduto);
+
+
+//DELETE /produtos/idProduto ->Deletar um produto
+router.delete("/produtos/:idProduto", produtoController.deletarProduto);
+
+
+module.exports = { produtoRoutes: router }; 
