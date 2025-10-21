@@ -30,7 +30,7 @@ const produtoController = {
         const { idProduto } = req.query;
         if (idProduto) {
             if (idProduto.length!=36) {
-                return res.status(400).json({erro: 'Inválido'})
+                return res.status(400).json({erro: 'Id do produto não encontrado'})
             }
             const produto = await produtoModel.buscarUm(idProduto);
             res.status(200).json(produto);
