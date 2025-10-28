@@ -6,15 +6,28 @@ const clienteController = {
     //GET /clientes
 
     listarClientes: async (req, res) => {
-        try {
+        try{
+            const {idCliente} = req.query;
+            
+            if(idCliente) {
+                if (idCliente.length !=36) {
+                    return res.status(400).json({erro: 'ID inválido'});
+                }
+
+                const cliente = await clienteModel.buscarUm(idCliente)
+                return res.status(200).json(cliente)
+            }
+
             const clientes = await clienteModel.buscarTodos();
 
             res.status(200).json(clientes);
+
         } catch (error) {
-            console.error('Erro ao listar os clientes:', error);
-            res.status(500).json({ message: 'Erro ao buscar clientes.' });
+            console.error('Erro ao listar cliente', error);
+            res.status(500).json({message: 'Erro ao boscar clientes'});
         }
     },
+        
 
 
 
@@ -28,7 +41,7 @@ const clienteController = {
 */
 
 
-    criarCliente: async (req, res)=>{
+     criarCliente: async (req, res)=>{
         try {
             const {nomeCliente, cpfCliente} = req.body; 
 
@@ -37,20 +50,14 @@ const clienteController = {
                 });
             }
 
-            const result = await clienteModel.buscarCPF(cpfCliente); 
-            if(result.length > 0) { //o lenght vai mostrar quantos números tem
-                return res.status(409).json({message: 'Esse CPF já existe'}); 
-            }
-
             await clienteModel.inserirCliente(nomeCliente, cpfCliente);
-            res.status(201).json({message:"Cliente cadastrado com sucesso!"});
+            res.status(201).json({message:"Cliente Cadastrado com sucesso!"});
 
         } catch (error) {
-            console.error('Erro ao cadastrar os clientes:', error);
-            res.status(500).json({erro:'Erro no servidor ao cadastrar clientes'}); 
+            console.error('Erro ao cadastrar cliente:', error);
+            res.status(500).json({erro:'Erro no servidor ao cadastrar cliente'}); 
         }
     }
 }
-
 
 module.exports = {clienteController};

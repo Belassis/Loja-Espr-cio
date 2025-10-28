@@ -19,6 +19,27 @@ const clienteModel={
         }
     },
 
+    buscarUm: async ()=>{
+        try {
+            
+            const pool = await getConnection(); //cria um conjunto de conexão com o bd
+
+            let sql ='SELECT * FROM clientes WHERE idCliente = @idCliente'; //select from a tabela que eu criei no sql
+
+            const result = await pool
+            .request()
+            .input(`idCliente`, sql.UniqueIdentifier, idCliente)
+            .query(querySQL);
+
+            return result.recordset; 
+
+        } catch (error) {
+            console.error('Erro ao buscar o cliente', error);
+
+            throw error; //passar o erro para controlar
+        }
+    },
+
      buscarCPF: async (cpfCliente)=>{
         try {
             
@@ -27,7 +48,7 @@ const clienteModel={
             let sql ='SELECT * FROM cpfCliente'; //select from a tabela que eu criei no sql
 
             const result = await pool.request().query(sql);
-            input('cpfCliente', sql.VarChar(11), cpfCliente) 
+            input('cpfCliente', sql.Char(11), cpfCliente) 
             .query(querySQL);
 
             return result.recordset; 
@@ -49,7 +70,7 @@ const clienteModel={
 
             await pool.request() //requisição que ele vai fazer ao banco de dados
             .input('nomeCliente', sql.VarChar(100), nomeCliente)
-            .input('cpfCliente', sql.VarChar(11), cpfCliente) 
+            .input('cpfCliente', sql.Char(11), cpfCliente) 
             .query(querySQL);
             
         } catch (error) {
